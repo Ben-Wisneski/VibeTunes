@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VibeTunes</title>
+  
+  <link href="http://googleusercontent.com/css?family=Caveat" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif; 
+      background-color: #121212;
+      color: white;
+      text-align: center;
+      margin-top: 50px;
+    }
+    
+    h1 {
+      color: white; 
+      font-size: 3em;
+      margin-bottom: 20px;
+      padding: 0;
+    }
+    .part-blue {
+      color: #19aab4;
+      font-family: cursive;
+      font-weight: bold;
+    }
+    .part-purple {
+      color: #9370DB;
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; 
+    }
+    
+    h2 {
+      margin-bottom: 30px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #19aab4;
+      color: white; 
+    }
+    input, select {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      margin: 5px;
+      width: 200px;
+    }
+    button {
+      background-color: #19aab4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #19aab4;
+    }
+    .playlist {
+      margin-top: 30px;
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      padding: 20px;
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+    .track-item {
+        margin-bottom: 15px;
+        display: flex; 
+        align-items: center;
+    }
+    .track-item img {
+        margin-right: 15px;
+        border-radius: 4px;
+    }
+    .track-info {
+        word-wrap: break-word;
+        max-width: calc(100% - 79px);
+    }
+    a {
+      color: #19aab4;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+  
+</head>
+<body>
+  
+  <h1>
+    <span class="part-blue">Vibe</span><span class="part-purple">Tunes</span>
+  </h1>
+  <form method="POST">
+    <label for="mood">Mood:</label>
+    <input type="text" name="mood" id="mood" placeholder="e.g. happy, focused, chill" required>
+    <br>
+    
+    <label for="genre">Genre:</label>
+    <input type="text" name="genre" id="genre" placeholder="e.g. pop, rock, lofi" required>
+    <br>
+    <button type="submit">Generate Playlist</button>
+  </form>
+
+  {% if playlist is not none and playlist is iterable %}
+  <div class="playlist">
+
+    {% if request.form.get('mood') and request.form.get('genre') %}
+    <h2>
+        Your {{ request.form.get('mood') | capitalize}} {{ request.form.get('genre') | capitalize}} Playlist
+    </h2>
+    {% else %}
+    <h2>Your Playlist</h2>
+    {% endif %}
+
+    <ul style="list-style: none; padding: 0;">
+      
+      {% for song in playlist %}
+        <li class="track-item">
+          {% if song.image %}
+              <img src="{{ song.image }}" width="64" height="64" alt="Album Cover">
+          {% endif %}
+
+          <div class="track-info">
+              <a href="{{ song.url }}" target="_blank">**{{ song.name }}**</a> by {{ song.artist }}
+          </div>
+        </li>
+      {% endfor %}
+
+      {% if playlist | length == 0 %}
+          <li><p>No songs found for that mood/genre combination. Try something different!</p></li>
+      {% endif %}
+    </ul>
+    
+    </div>
+  {% endif %}
+  
+</body>
+</html>
