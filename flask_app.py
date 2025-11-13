@@ -78,7 +78,7 @@ def get_playlist(mood, genre):
     
     # Step 2: Get Tracks from the Chosen Playlist
     tracks_url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
-    params = {"limit": 20, "fields": "items(track(name,artists,external_urls,album))"} # Requesting 20 to ensure 10 are returned
+    params = {"limit": 20, "fields": "items(track(name,artists,external_urls,album))"}
     
     res = requests.get(tracks_url, headers=headers, params=params)
 
@@ -104,7 +104,7 @@ def get_playlist(mood, genre):
         
         playlist.append({"name": name, "artist": artist, "url": url, "image": image_url})
         
-        if len(playlist) >= 10: # <--- CHANGED TO 10
+        if len(playlist) >= 10:
             break
             
     return playlist
